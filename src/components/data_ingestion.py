@@ -26,6 +26,7 @@ class DataIngestion:
         try:
             df = pd.read_csv(r'C:\Users\EL-Dorado\Downloads\Data Science & ML\Projects\mlprojects\notebook\data\StudentsPerformance.csv')
             logging.info('Read the dataset as dataframe')
+
             # Create data path and make directory
             os.makedirs(os.path.dirname(self.ingestion_config.train_data_path), exist_ok=True)
             df.to_csv(self.ingestion_config.raw_data_path, index=False, header=True)
@@ -45,13 +46,12 @@ class DataIngestion:
             logging.error(f"Exception occurred during data ingestion: {e}")
             raise CustomException("Failed to ingest data", str(e))
 
-
 if __name__ == "__main__":
     obj = DataIngestion()
-    train_data_path, test_data_path = obj.initiate_data_ingestion()
+    train_data, test_data = obj.initiate_data_ingestion()
 
     data_transformation = DataTransformation()
-    train_arr, test_arr, _ = data_transformation.initiate_data_transformation(train_data_path, test_data_path)
+    train_arr, test_arr, _ = data_transformation.initiate_data_transformation(train_data, test_data)
 
     modeltrainer = ModelTrainer()
     print(modeltrainer.initiate_model_trainer(train_arr, test_arr))

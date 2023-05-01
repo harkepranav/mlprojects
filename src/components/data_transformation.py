@@ -19,7 +19,7 @@ class DataTransformation:
     def __init__(self):
         self.data_transformation_config = DataTransformationConfig()
 
-    def get_data_transoformer_object(self):
+    def get_data_transformer_object(self):
         """This function is responsible for data transformation"""
         try:
             numerical_columns = ['writing score', 'reading score']
@@ -30,14 +30,14 @@ class DataTransformation:
             # Handling Missing Values
             num_pipeline = Pipeline(
                 steps=[
-                    ('imputer', SimpleImputer(strategy='median')),
+                    ('impute', SimpleImputer(strategy='median')),
                     ('scaler', StandardScaler())
                 ]
             )
 
             cat_pipeline = Pipeline(
                 steps=[
-                    ('imputer', SimpleImputer(strategy='most_frequent')),
+                    ('impute', SimpleImputer(strategy='most_frequent')),
                     ('one_hot_encoder', OneHotEncoder()),
                     ('scaler', StandardScaler())
                 ]
@@ -65,7 +65,7 @@ class DataTransformation:
             logging.info("Reading of train and test data completed...")
             logging.info('Obtaining preprocessor object...')
 
-            preprocessor_obj = self.get_data_transoformer_object()
+            preprocessor_obj = self.get_data_transformer_object()
             target_column_name = 'math score'
             numerical_columns = ['writing score', 'reading score']
 
@@ -91,7 +91,7 @@ class DataTransformation:
                 obj=preprocessor_obj
             )
 
-            return (train_arr, test_arr, self.data_transformation_config.preprocesssor_obj_file_path)
+            return train_arr, test_arr, self.data_transformation_config.preprocesssor_obj_file_path
 
         except Exception as e:
             raise CustomException(e, sys)
